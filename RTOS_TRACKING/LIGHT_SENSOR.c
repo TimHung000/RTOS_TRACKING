@@ -6,7 +6,7 @@
 #include "LCD.h"
 
 
-// 0: ADC0 -> middle front; 1: ADC1 -> left; 2: ADC2 -> middle back; 3: ADC3 -> right
+// 0: ADC0 -> votage; 1: ADC1 -> left; 2: ADC2 -> middle; 3: ADC3 -> right
 volatile int16_t sensor_values[4] = {0, 0, 0, 0};
 static volatile uint8_t is_first_conversion = 1;
 
@@ -17,14 +17,15 @@ void init_ADC(void) {
 	// Set AVCC as the reference voltage
 	ADMUX = (1 << REFS0);
 	
-	// Enable ADC,enable ADC interrupt, and set ADC prescaler to 128
+	// Enable ADC,enable ADC interrupt, and set ADC prescalar to 128
 	ADCSRA = (1 << ADEN) | (1 << ADIE) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
 	
 	// start conversion
 	ADCSRA |= (1 << ADSC);
 }
-
-// ADC Conversion Complete Interrupt Service Routine
+/**
+ *  ADC Conversion Complete Interrupt Service Routine
+*/
 ISR(ADC_vect) {
 	if (is_first_conversion) {
 		ADCSRA |= (1 << ADSC);
@@ -32,8 +33,8 @@ ISR(ADC_vect) {
 		return;
 	}
 
-    sensor_values[ADMUX & 0x03] = (int16_t)ADCL;
-	sensor_values[ADMUX & 0x03] += (int16_t)((uint16_t)ADCH << 8); 
+    sensor_values[ADMUX & 0x03] = ADCL;
+	sensor_values[ADMUX & 0x03] += (uint16_t)ADCH << 8; 
 
     if ((ADMUX & 0x03) == 3) {
 

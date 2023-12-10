@@ -7,11 +7,6 @@
 #include "LCD.h"
 #include "EX_INT.h"
 
-uint8_t PWM = 0;
-uint8_t Menu = 0;
-uint8_t Move_ok = 1;
-uint8_t Menu_Counter = 0;
-
 /*
  *
  * Initiate External Interupt Vector
@@ -42,6 +37,9 @@ void init_Ex_INTn(void) {
     // INT7: Falling Edge
     EICRB &= ~(1 << ISC70);
 	EICRB |= (1 << ISC71);
+
+	// Clear all interrupt flags in EIFR
+    EIFR = (1 << INTF0) | (1 << INTF1) | (1 << INTF5) | (1 << INTF6) | (1 << INTF7);
 	
 	// Enable external interrupts on INT0, INT1, INT5, INT6, and INT7
     EIMSK |= (1 << INT0) | (1 << INT1) | (1 << INT5) | (1 << INT6) | (1 << INT7);

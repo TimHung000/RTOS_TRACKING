@@ -18,8 +18,6 @@ void init_PWM_time3(void) {
 	// initilize both left and right motor duty cycle to 0
 	LEFT_MOTOR_OCR = 0;
 	RIGHT_MOTOR_OCR = 0;
-	
-
 }
 
 /**
@@ -75,50 +73,4 @@ void motorStop(uint8_t motor) {
 	} else if (motor == RIGHT_MOTOR) {
 		RIGHT_MOTOR_OCR = 0;
 	}
-}
-
-void motion(uint8_t dir,uint8_t speed)
-{
-	if (dir == STOP)
-	{
-		OCR3A = 0;
-		OCR3B = 0;
-	}
-	else if (dir == FORWARD)
-	{
-		CLRBIT(PORTB, PB0);
-		SETBIT(PORTB, PB1);
-		CLRBIT(PORTB, PB2);
-		SETBIT(PORTB, PB3);
-		OCR3A = speed*3;
-		OCR3B = speed*3;
-	}
-	else if (dir == TURN_LEFT)
-	{
-		CLRBIT(PORTB, PB0);
-		SETBIT(PORTB, PB1);
-		CLRBIT(PORTB, PB3);
-		SETBIT(PORTB, PB2);
-		OCR3A = speed*3;
-		OCR3B = speed*3;
-	}
-	else if (dir == BACKWARD)
-	{
-		CLRBIT(PORTB, PB1);
-		SETBIT(PORTB, PB0);
-		CLRBIT(PORTB, PB3);
-		SETBIT(PORTB, PB2);
-		OCR3A = speed*3;
-		OCR3B = speed*3;
-	}
-	else if (dir == TURN_RIGHT)
-	{
-		CLRBIT(PORTB, PB1);
-		SETBIT(PORTB, PB0);
-		CLRBIT(PORTB, PB2);
-		SETBIT(PORTB, PB3);
-		OCR3A = speed*3;
-		OCR3B = speed*3;
-	}
-
 }

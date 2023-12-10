@@ -20,10 +20,6 @@
 #define RIGHT_MOTOR_BACKWARD_PIN 	PB2
 #define RIGHT_MOTOR_OCR				OCR3B
 
-#define SETBIT(REG,BIT)	(REG |= (_BV(BIT)))
-#define CLRBIT(REG,BIT)	(REG &= ~(_BV(BIT)))
-#define CHKBIT(REG,BIT)	((REG & (_BV(BIT)))==(_BV(BIT)))
-
 /**
  *	PB0 -> left  motor backward
  *	PB1 -> left  motor forward
@@ -36,7 +32,6 @@
  *  OC3B(PE4)
  *  OC3C(PE5)
  */
-
 
 /**
  *	Timer3 PWM For Motor
@@ -61,6 +56,7 @@ void motorDirection(uint8_t motor, uint8_t direction);
  * @return: output comparator register(OCR) value
  */
 uint16_t motorSpeed(uint8_t motor, uint8_t duty_cycle);
+void motorStop(uint8_t motor);
 
 void motion(uint8_t dir,uint8_t speed);
 

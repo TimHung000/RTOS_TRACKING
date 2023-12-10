@@ -34,10 +34,15 @@ int main (void) {
 	init_ADC();
 
  	// Timer for tracking system
-	init_tracking_time2();
+	// init_tracking_time2();
 
 	// External Interrupt for 5 buttons 
 	init_Ex_INTn();
+
+	// motorDirection(LEFT_MOTOR, FORWARD);
+	// motorSpeed(LEFT_MOTOR, 10);
+	// motorDirection(RIGHT_MOTOR, FORWARD);
+	// motorSpeed(RIGHT_MOTOR, 10);
 
 	sei();
 
@@ -46,22 +51,22 @@ int main (void) {
 		char buffer[13];
 		// 0: ADC0 -> middle front
 		LCD_Set_Cursor(0,0);     
-		sprintf(buffer, "MF:%d", sensor_values[0]);
+		sprintf(buffer, "V:%4d", sensor_values[0]);
 		putsLCD(buffer);
 
 		// 1: ADC1 -> left
 		LCD_Set_Cursor(0,8);     
-		sprintf(buffer, " L:%d", sensor_values[1]);
+		sprintf(buffer, "L:%4d", sensor_values[1]);
 		putsLCD(buffer);
 
 		// 2: ADC2 -> middle back
 		LCD_Set_Cursor(1,0);     
-		sprintf(buffer, "MB:%d", sensor_values[2]);
+		sprintf(buffer, "M:%4d", sensor_values[2]);
 		putsLCD(buffer);
 
 		// 3: ADC3 -> right
 		LCD_Set_Cursor(1,8);
-		sprintf(buffer, " R:%d", sensor_values[3]);
+		sprintf(buffer, "R:%4d", sensor_values[3]);
 		putsLCD(buffer);
 		
 		// sei();

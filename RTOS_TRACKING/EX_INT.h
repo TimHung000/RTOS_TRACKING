@@ -1,11 +1,6 @@
 #ifndef _EX_INT_H
 #define _EX_INT_H
 
-extern uint8_t PWM;
-extern uint8_t Menu;
-extern uint8_t Move_ok;
-extern uint8_t Menu_Counter;
-
 /*
  *
  * Initiate External Interupt Vector
