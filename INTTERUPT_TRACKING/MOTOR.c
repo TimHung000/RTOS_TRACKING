@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "MOTOR.h"	
+#include "LCD.h"
 
 /**
  *	Time3 PWM For Motor
@@ -11,10 +12,6 @@
  *	OCR3A = 0 -> this is used to control duty cycle, 0 means 0% duty cycle
 */
 void init_PWM_time3(void) {
-	/* For PWM */
-	DDRB |= (1 << DDB0) | (1 << DDB1) | (1 << DDB2) | (1 << DDB3); // output pin for controlling forward and backward
-	DDRE |= (1 << DDE3) | (1 << DDE4); // PWM output pin LEFT_MOTOR_OCR, RIGHT_MOTOR_OCR
-
 	TCCR3A = (1 << COM3A1) | (1 << COM3B1) | (1 << WGM31) | (1 << WGM30);
 	TCCR3B = (1 << WGM32) | (1 << CS32);
 

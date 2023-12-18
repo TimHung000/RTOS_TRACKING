@@ -1,7 +1,3 @@
-#ifndef F_CPU
-	#define F_CPU 16000000UL
-#endif
-
 #include <avr/io.h>
 #include <avr/iom128.h>
 #include <avr/interrupt.h>
@@ -16,40 +12,12 @@
 #include "EX_INT.h"
 #include "LIGHT_SENSOR.h"
 #include "TRACKING.h"
+#include "kernel.h"
 
-int main (void) {
-	/* For PWM */
-	DDRB = 0xFF; // 
-	DDRE = 0x1F; // LEFT_MOTOR_OCR, RIGHT_MOTOR_OCR
-
-	// activate LCD 
- 	OpenLCD();
-	_delay_ms(2000);
-	LCD_CLR();
-	
-	// Timer used for collect light sensor data
-	init_PWM_time3();
-
-	// ADC For light sensors 
-	init_ADC();
-
- 	// Timer for tracking system
-	// init_tracking_time2();
-
-	// External Interrupt for 5 buttons 
-	init_Ex_INTn();
-
-	// motorDirection(LEFT_MOTOR, FORWARD);
-	// motorSpeed(LEFT_MOTOR, 10);
-	// motorDirection(RIGHT_MOTOR, FORWARD);
-	// motorSpeed(RIGHT_MOTOR, 10);
-
-	sei();
-
-	while (1) {
-		// cli();
+void outputLCD(void) {
+	while(1) {
 		char buffer[13];
-		// 0: ADC0 -> middle front
+		// 0: ADC0 -> voltage
 		LCD_Set_Cursor(0,0);     
 		sprintf(buffer, "V:%4d", sensor_values[0]);
 		putsLCD(buffer);
@@ -68,9 +36,51 @@ int main (void) {
 		LCD_Set_Cursor(1,8);
 		sprintf(buffer, "R:%4d", sensor_values[3]);
 		putsLCD(buffer);
-		
-		// sei();
 	}
+}
+
+void motorControl() {
+	while (1) {
+		motorDirection(LEFT_MOTOR, FORWARD);
+		motorSpeed(LEFT_MOTOR, 10);
+		motorDirection(RIGHT_MOTOR, FORWARD);
+		motorSpeed(RIGHT_MOTOR, 10);
+	}
+}
+
+int main (void) {
+	// External Interrupt for 5 buttons
+	init_Ex_INTn();
+	
+	// ADC For light sensors
+	init_ADC();
+	
+	// Timer used for collect light sensor data
+	init_PWM_time3();
+		
+	// activate LCD 
+ 	OpenLCD();
+	_delay_ms(2000);
+	LCD_CLR();
+	
+	// ADC For light sensors
+	init_ADC();
+	
+	// Timer used for time sharing
+	init_sharing_time1();
+
+ 	// Timer for tracking system
+	// init_tracking_time2();
+
+	addTask((void*)&outputLCD, NULL);
+	addTask((void*)&perform_ADC_conversion, NULL);
+	addTask((void*)&motorControl, NULL);
+
+	sei();
+
+	while (1) {	}
+	
+	return 0;
 }
 
 
